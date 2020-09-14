@@ -1,0 +1,14 @@
+Characterístics of a good library
+	- Maintenance: Android is a constant envolve entitiy, so the library need to envolve in the same to not become deprecate. Use a library with low maintanance in a application can result in a broken app.
+		
+		+ Check the graphics tab from github to see the activity
+		
+	- Known issues: See what kind of commom problems the library has accessing the issues tab from GitHub and analyse with your app function to see if will not bring problems to it.
+	
+	- Features: You can find many libraries with the same functionality, and the best one is the library that has only the features that you need without extra ones that will only increase the APK size
+	
+	- License: it`s important to check the copyrights and if you want to use the library is important to attend to the requirements. On the contrary, your app can be rejected.
+		
+		+ Check license section
+		
+	- Search in the google "*name of the library* vs" bring results with further information about differences between the library you want to use and others with same functions, and you can read comments from users
