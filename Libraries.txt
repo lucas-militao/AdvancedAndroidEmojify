@@ -1,4 +1,5 @@
-Characterístics of a good library
+How to find a good library?
+
 	- Maintenance: Android is a constant envolve entitiy, so the library need to envolve in the same to not become deprecate. Use a library with low maintanance in a application can result in a broken app.
 		
 		+ Check the graphics tab from github to see the activity
