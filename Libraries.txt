@@ -13,3 +13,17 @@ How to find a good library?
 		+ Check license section
 		
 	- Search in the google "*name of the library* vs" bring results with further information about differences between the library you want to use and others with same functions, and you can read comments from users
+
+Probabilities
+
+    Serious with Eyes Wide Open
+        Smile: 0.010426057
+        Left Eye: 0.9992078
+        Right Eye: 0.9988863
+
+    Serious With Eyes Closed
+        Smile: 0.1702308
+        Left Eye: 0.056715727
+        Right Eye: 0.024560452
+
+

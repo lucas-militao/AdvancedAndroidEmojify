@@ -17,7 +17,7 @@ public class Emojifier {
     static void detectFaces(Context context, Bitmap bitmap) {
 
         FaceDetector detector = new FaceDetector.Builder(context)
-                .setTrackingEnabled(false )
+                .setTrackingEnabled(false)
                 .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
                 .build();
 
@@ -25,9 +25,21 @@ public class Emojifier {
 
         SparseArray<Face> faces = detector.detect(frame);
 
-        Toast.makeText(context, "detectFaces: number of faces = " + faces.size(), Toast.LENGTH_SHORT).show();
+       Log.d(LOG_TAG, "detectFaces: number of faces = " + faces.size());
+
+        if (faces.size() == 0) {
+            Toast.makeText(context, "No faces detected", Toast.LENGTH_SHORT).show();
+        } else {
+            getClassification(faces.get(0));
+        }
 
         detector.release();
+    }
+
+    static void getClassification(Face face) {
+        Log.v(LOG_TAG, "Smile: " + face.getIsSmilingProbability() +
+                "\nLeft Eye: " + face.getIsLeftEyeOpenProbability() +
+                "\n Right Eye: " + face.getIsRightEyeOpenProbability());
     }
 
 }
