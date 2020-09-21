@@ -3,6 +3,7 @@ package com.example.android.emojify;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.SparseArray;
@@ -16,14 +17,17 @@ public class Emojifier {
 
     private static final String LOG_TAG = Emojifier.class.getSimpleName();
     //Variables with threshold constants
-    private static final float SMILE = 0.5f;
-    private static final float EYE_OPEN = 0.5f;
+    private static final double SMILE = .15;
+    private static final double EYE_OPEN = .5;
+    private static final float EMOJI_SCALE_FACTOR = .9f;
     //Booleans to track the states of the facial expression
     private static boolean leftEyeOpen = false;
     private static boolean rightEyeOpen = false;
     private static boolean smile = false;
 
-    static void detectFacesAndOverlayEmoji(Context context, Bitmap bitmap) {
+    static Bitmap detectFacesAndOverlayEmoji(Context context, Bitmap bitmap) {
+
+        Bitmap resultBitmap = bitmap;
 
         FaceDetector detector = new FaceDetector.Builder(context)
                 .setTrackingEnabled(false)
@@ -69,11 +73,18 @@ public class Emojifier {
                     case RIGHT_TWINK_FROWN:
                         emojiBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.rightwinkfrown);
                         break;
+                    default:
+                        emojiBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile);
+                        break;
                 }
+
+                resultBitmap = addBitmapToFace(bitmap, emojiBitmap, face);
             }
         }
 
         detector.release();
+
+        return resultBitmap;
     }
 
     static Emoji whichEmoji(Face face) {
@@ -100,6 +111,27 @@ public class Emojifier {
             else
                 return Emoji.CLOSED_FROWN;
         }
+    }
+
+    private static Bitmap addBitmapToFace(Bitmap backgroundBitmap, Bitmap emojiBitmap, Face face) {
+
+        Bitmap resultBitmap = Bitmap.createBitmap(backgroundBitmap.getWidth(), backgroundBitmap.getHeight(), backgroundBitmap.getConfig());
+
+        float scaleFactor = EMOJI_SCALE_FACTOR;
+
+        int newEmojiWidht = (int) (face.getWidth() * scaleFactor);
+        int newEmojiHeight = (int) (emojiBitmap.getHeight() * newEmojiWidht / emojiBitmap.getWidth() * scaleFactor);
+
+        emojiBitmap = Bitmap.createScaledBitmap(emojiBitmap, newEmojiWidht, newEmojiHeight, false);
+
+        float emojiPositionX = (face.getPosition().x * face.getWidth() / 2) - emojiBitmap.getWidth() / 2;
+        float emojiPositionY = (face.getPosition().y * face.getHeight() / 2) - emojiBitmap.getHeight() / 3;
+
+        Canvas canvas = new Canvas(resultBitmap);
+        canvas.drawBitmap(backgroundBitmap, 0,0, null);
+        canvas.drawBitmap(emojiBitmap, emojiPositionX, emojiPositionY, null);
+
+        return resultBitmap;
     }
 
 }
