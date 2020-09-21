@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the new bitmap to the ImageView
         mImageView.setImageBitmap(mResultsBitmap);
 
-        Emojifier.detectFaces(this, mResultsBitmap);
+        Emojifier.detectFacesAndOverlayEmoji(this, mResultsBitmap);
     }
 
 

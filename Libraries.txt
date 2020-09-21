@@ -26,4 +26,27 @@ Probabilities
         Left Eye: 0.056715727
         Right Eye: 0.024560452
 
+    Smiling with Eyes Closes
+        Smile: 0.95484906
+        Left Eye: 0.010038912
+        Right Eye: 0.020862639
 
+    Smiling with Eyes Open
+        Smile: 0.99032384
+        Left Eye: 0.57002735
+        Right Eye: 0.94885206
+
+    Sad with eyes closed
+        Smile: 0.008071166
+        Left Eye: 0.020991027
+        Right Eye: 0.012393415
+
+    Sad with eyes open
+        Smile: 0.010426057
+        Left Eye: 0.9961413
+        Right Eye: 0.99772763
+
+    Sad with eyes putting effort to close
+        Smile: 0.007166874
+        Left Eye: 0.08553207
+        Right Eye: 0.9668618
