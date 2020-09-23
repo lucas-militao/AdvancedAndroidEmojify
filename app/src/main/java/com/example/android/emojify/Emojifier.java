@@ -25,20 +25,20 @@ public class Emojifier {
     private static boolean rightEyeOpen = false;
     private static boolean smile = false;
 
-    static Bitmap detectFacesAndOverlayEmoji(Context context, Bitmap bitmap) {
-
-        Bitmap resultBitmap = bitmap;
+    static Bitmap detectFacesAndOverlayEmoji(Context context, Bitmap picture) {
 
         FaceDetector detector = new FaceDetector.Builder(context)
                 .setTrackingEnabled(false)
                 .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
                 .build();
 
-        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+        Frame frame = new Frame.Builder().setBitmap(picture).build();
 
         SparseArray<Face> faces = detector.detect(frame);
 
-       Log.d(LOG_TAG, "detectFaces: number of faces = " + faces.size());
+        Log.d(LOG_TAG, "detectFaces: number of faces = " + faces.size());
+
+        Bitmap resultBitmap = picture;
 
         if (faces.size() == 0) {
             Toast.makeText(context, "No faces detected", Toast.LENGTH_SHORT).show();
@@ -78,7 +78,7 @@ public class Emojifier {
                         break;
                 }
 
-                resultBitmap = addBitmapToFace(bitmap, emojiBitmap, face);
+                resultBitmap = addBitmapToFace(picture, emojiBitmap, face);
             }
         }
 
@@ -115,20 +115,31 @@ public class Emojifier {
 
     private static Bitmap addBitmapToFace(Bitmap backgroundBitmap, Bitmap emojiBitmap, Face face) {
 
-        Bitmap resultBitmap = Bitmap.createBitmap(backgroundBitmap.getWidth(), backgroundBitmap.getHeight(), backgroundBitmap.getConfig());
+        // Initialize the results bitmap to be a mutable copy of the original image
+        Bitmap resultBitmap = Bitmap.createBitmap(backgroundBitmap.getWidth(),
+                backgroundBitmap.getHeight(), backgroundBitmap.getConfig());
 
+        // Scale the emoji so it looks better on the face
         float scaleFactor = EMOJI_SCALE_FACTOR;
 
-        int newEmojiWidht = (int) (face.getWidth() * scaleFactor);
-        int newEmojiHeight = (int) (emojiBitmap.getHeight() * newEmojiWidht / emojiBitmap.getWidth() * scaleFactor);
+        // Determine the size of the emoji to match the width of the face and preserve aspect ratio
+        int newEmojiWidth = (int) (face.getWidth() * scaleFactor);
+        int newEmojiHeight = (int) (emojiBitmap.getHeight() *
+                newEmojiWidth / emojiBitmap.getWidth() * scaleFactor);
 
-        emojiBitmap = Bitmap.createScaledBitmap(emojiBitmap, newEmojiWidht, newEmojiHeight, false);
 
-        float emojiPositionX = (face.getPosition().x * face.getWidth() / 2) - emojiBitmap.getWidth() / 2;
-        float emojiPositionY = (face.getPosition().y * face.getHeight() / 2) - emojiBitmap.getHeight() / 3;
+        // Scale the emoji
+        emojiBitmap = Bitmap.createScaledBitmap(emojiBitmap, newEmojiWidth, newEmojiHeight, false);
 
+        // Determine the emoji position so it best lines up with the face
+        float emojiPositionX =
+                (face.getPosition().x + face.getWidth() / 2) - emojiBitmap.getWidth() / 2;
+        float emojiPositionY =
+                (face.getPosition().y + face.getHeight() / 2) - emojiBitmap.getHeight() / 3;
+
+        // Create the canvas and draw the bitmaps to it
         Canvas canvas = new Canvas(resultBitmap);
-        canvas.drawBitmap(backgroundBitmap, 0,0, null);
+        canvas.drawBitmap(backgroundBitmap, 0, 0, null);
         canvas.drawBitmap(emojiBitmap, emojiPositionX, emojiPositionY, null);
 
         return resultBitmap;
